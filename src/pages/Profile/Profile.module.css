@@ -1,0 +1,485 @@
+.section {
+  margin-top: 60px;
+}
+
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 110%;
+  color: #000;
+  margin-bottom: 40px;
+}
+
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: 33px;
+  background: #fff;
+  border-radius: 30px;
+  padding: 30px;
+  box-shadow: 0 4px 67px -12px rgba(0, 0, 0, 0.13);
+}
+
+.avatarWrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 197px;
+  height: 197px;
+}
+
+.avatarLabel {
+  display: block;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.avatarInput {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 20px;
+}
+
+.avatarSvg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 30px;
+}
+
+.name {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 110%;
+  color: #000;
+  margin: 0;
+}
+
+.editNameButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #000;
+  cursor: pointer;
+  border-radius: 8px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.editNameButton:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.editNameButton:active {
+  background: #e0e0e0;
+}
+
+.nameEditRow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.nameInput {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 110%;
+  color: #000;
+  padding: 8px 12px;
+  border: 1px solid #000;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+.nameInput::placeholder {
+  color: #999;
+}
+
+.nameEditActions {
+  display: flex;
+  gap: 12px;
+}
+
+.nameSaveButton,
+.nameCancelButton {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+  text-align: center;
+}
+
+.nameSaveButton {
+  background: #000;
+  color: #fff;
+  border: 1px solid #000;
+}
+
+.nameSaveButton:hover {
+  background: #333;
+}
+
+.nameCancelButton {
+  background: transparent;
+  color: #000;
+  border: 1px solid #000;
+}
+
+.nameCancelButton:hover {
+  background: #f0f0f0;
+}
+
+.login {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 110%;
+  color: #000;
+  margin-bottom: 44px;
+}
+
+.logoutButton {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 110%;
+  color: #000;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 46px;
+  padding: 16px 26px;
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+  min-width: 192px;
+}
+
+.logoutButton:hover {
+  background: #f7f7f7;
+}
+
+.logoutButton:active {
+  background: #e9eced;
+}
+
+/* Мои курсы */
+.myCoursesSection {
+  margin-top: 60px;
+}
+
+.myCoursesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.myCourseCard {
+  background: #fff;
+  border-radius: 30px;
+  overflow: visible;
+  box-shadow: 0 4px 67px -12px rgba(0, 0, 0, 0.13);
+  display: flex;
+  flex-direction: column;
+}
+
+.myCourseImageWrap {
+  position: relative;
+  border-radius: 30px 30px 0 0;
+  overflow: visible;
+  min-height: 180px;
+}
+
+.myCourseImageClip {
+  border-radius: 30px 30px 0 0;
+  overflow: hidden;
+  min-height: 180px;
+}
+
+.myCourseImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.myCourseRemoveWrap {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 22px 22px 0 0;
+  z-index: 10;
+}
+
+.myCourseRemoveBtn {
+  display: inline-flex;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.myCourseTooltip {
+  position: absolute;
+  left: calc(100% - 8px);
+  top: 50px;
+  white-space: nowrap;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 110%;
+  color: #202020;
+  border: 0.5px solid #000;
+  border-radius: 5px;
+  padding: 6px;
+  background: #fff;
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.myCourseContent {
+  padding: 24px 30px 28px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.myCourseTitle {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 110%;
+  color: #000;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+.myCourseMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.myCourseMetaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 110%;
+  color: #202020;
+  background: #f7f7f7;
+  border-radius: 50px;
+  padding: 10px;
+}
+
+.myCourseMetaItem svg {
+  flex-shrink: 0;
+}
+
+.myCourseProgressLabel {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 110%;
+  color: #202020;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.myCourseProgressBar {
+  height: 6px;
+  background: #f7f7f7;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.myCourseProgressFill {
+  height: 100%;
+  background: #00c1ff;
+  border-radius: 50px;
+  transition: width 0.2s ease;
+}
+
+.myCourseButton {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 110%;
+  color: #000;
+  background: #bcec30;
+  border: none;
+  border-radius: 46px;
+  padding: 16px 26px;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+  box-sizing: border-box;
+  margin-top: 40px;
+}
+
+.myCourseButton:hover {
+  background: #c6ff00;
+}
+
+.myCourseButton:active {
+  color: #fff;
+  background: #000;
+}
+
+@media (max-width: 1160px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .section {
+    margin-top: 40px;
+  }
+
+  .title {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .card {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .avatarWrap {
+    width: 141px;
+    height: 141px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .avatarSvg {
+    width: 141px;
+    height: 141px;
+    object-fit: cover;
+  }
+
+  .avatarImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-content: space-between;
+  }
+
+  .nameRow {
+    margin: 0 0 20px;
+  }
+
+  .name {
+    font-size: 24px;
+  }
+
+  .nameEditRow {
+    margin-bottom: 20px;
+  }
+
+  .nameInput {
+    font-size: 24px;
+    max-width: 100%;
+  }
+
+  .login {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  .logoutButton {
+    font-size: 16px;
+    min-width: 100%;
+    width: 100%;
+  }
+
+  .myCoursesSection {
+    margin-top: 40px;
+    margin-bottom: 24px;
+  }
+
+  .myCoursesGrid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .myCourseContent {
+    padding: 20px 24px 24px;
+  }
+
+  .myCourseTitle {
+    font-size: 24px;
+  }
+
+  .myCourseMetaItem {
+    font-size: 14px;
+  }
+}

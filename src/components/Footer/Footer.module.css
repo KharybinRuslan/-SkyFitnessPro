@@ -1,0 +1,49 @@
+/* ===== PC / Desktop ===== */
+
+.footer {
+  margin-top: 34px;
+  margin-bottom: 81px;
+}
+
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.toTopButton {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 110%;
+  text-align: center;
+  color: #000;
+  background: #bcec30;
+  border: none;
+  border-radius: 46px;
+  padding: 16px 26px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.toTopButton:hover {
+  background: #c6ff00;
+}
+
+/* ===== Adaptive (max-width: 1160px) ===== */
+
+@media (max-width: 1160px) {
+  .footer {
+    margin-top: 24px;
+    margin-bottom: 30px;
+  }
+
+  .container {
+    justify-content: flex-end;
+    padding: 0 16px;
+  }
+
+  .toTopButton {
+    padding: 8px 16px;
+  }
+}

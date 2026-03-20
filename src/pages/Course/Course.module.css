@@ -1,0 +1,408 @@
+/* ===== PC / Desktop ===== */
+
+.section {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-top: 60px;
+}
+
+.hero {
+  background: #ffc700;
+  border-radius: 30px;
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  min-height: 310px;
+}
+
+.heroTitle {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 60px;
+  line-height: 110%;
+  color: #fff;
+  margin: 0;
+  flex-shrink: 0;
+  padding: 40px;
+}
+
+.heroImageWrap {
+  flex-shrink: 0;
+  align-self: flex-end;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.heroImage {
+  display: block;
+  width: auto;
+  object-fit: contain;
+  object-position: bottom right;
+}
+
+/* ===== Второй блок: Подойдет для вас, если (ПК) ===== */
+
+.fittingBlock {
+  margin-top: 60px;
+}
+
+.fittingTitle {
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 110%;
+  color: #000;
+  margin: 0;
+  padding-bottom: 40px;
+}
+
+.fittingList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 17px;
+}
+
+.fittingCard {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  border-radius: 28px;
+  padding: 20px;
+  background: linear-gradient(152deg, #151720 0%, #1e212e 100%);
+}
+
+.fittingNum {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 75px;
+  line-height: 135%;
+  color: #bcec30;
+  flex-shrink: 0;
+}
+
+.fittingText {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 110%;
+  color: #fff;
+  margin: 0;
+}
+
+/* ===== Третий блок: Направления (ПК) ===== */
+
+.directionsBlock {
+  margin-top: 60px;
+}
+
+.directionsTitle {
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 110%;
+  color: #000;
+  margin: 0;
+  padding-bottom: 40px;
+}
+
+.directionsBox {
+  border-radius: 28px;
+  padding: 30px;
+  background: #bcec30;
+}
+
+.directionsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 34px 0;
+}
+
+.directionsItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.directionsIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.directionsText {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 110%;
+  color: #000;
+}
+/* Последний блок: Начните путь к новому телу. padding-top — чтобы голова фото не обрезалась при overflow: hidden. */
+.ctaBlock {
+  margin-top: 22px;
+  padding-top: 80px;
+  overflow: hidden;
+  padding-bottom: 46px;
+}
+
+.ctaContainer {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  border-radius: 30px;
+  box-shadow: 0 4px 67px -12px rgba(0, 0, 0, 0.13);
+  background: #fff;
+  padding: 40px 40px 0;
+  min-height: 380px;
+  overflow: visible;
+  padding-right: calc(45% + 24px);
+}
+
+.ctaContent {
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 40px;
+  position: relative;
+  z-index: 2;
+  order: 0;
+}
+
+.ctaTitle {
+  font-weight: 500;
+  font-size: 60px;
+  line-height: 100%;
+  color: #000;
+  margin: 0 0 24px;
+}
+
+.ctaDescription,
+.ctaDescriptionList {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 110%;
+  color: #000;
+  opacity: 0.6;
+  margin: 0 0 32px;
+  max-width: 560px;
+}
+
+.ctaDescriptionList {
+  list-style: disc;
+  padding-left: 1.2em;
+}
+
+.ctaDescriptionItem {
+  margin-bottom: 0.35em;
+}
+
+.ctaDescriptionItem::marker {
+  color: #666;
+}
+
+.ctaButton {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 110%;
+  text-align: center;
+  color: #000;
+  background: #bcec30;
+  border: none;
+  border-radius: 46px;
+  padding: 16px 26px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 437px;
+  max-width: 100%;
+}
+
+.ctaButton:hover {
+  background: #c6ff00;
+}
+
+.ctaButton:active {
+  color: #fff;
+  background: #000;
+}
+
+/* Область изображения: справа внизу карточки; снизу обрезка по краю карточки (линии и фото не выходят). */
+.ctaImageWrap {
+  order: 1;
+  position: absolute;
+  right: 0;
+  bottom: -125px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 1;
+  overflow: hidden;
+  clip-path: inset(0 0 125px 0);
+}
+
+.ctaImageWrap picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ctaImage {
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+  object-position: bottom center;
+  display: block;
+}
+
+@media (max-width: 1160px) {
+  .ctaBlock {
+    margin-top: 0;
+    padding-bottom: 30px;
+    overflow: visible;
+    padding-top: 0;
+  }
+
+  .ctaContainer {
+    position: relative;
+    padding: 156px 0 0;
+    background: transparent;
+    box-shadow: none;
+    min-height: 0;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .ctaImageWrap {
+    position: absolute;
+    top: -100px;
+    right: -70px;
+    z-index: 1;
+    width: auto;
+    max-height: 500px;
+    margin: 0;
+    display: block;
+    overflow: visible;
+    pointer-events: none;
+    clip-path: none;
+  }
+
+  .ctaImageWrap picture {
+    display: block;
+    width: auto;
+    height: auto;
+    max-height: 100%;
+  }
+
+  .ctaImage {
+    display: block;
+    height: auto;
+    max-height: 500px;
+    max-width: none;
+    margin: 0;
+    object-fit: contain;
+  }
+
+  .ctaContent {
+    position: relative;
+    z-index: 2;
+    background: #fff;
+    border-radius: 30px;
+    box-shadow: 0 4px 67px -12px rgba(0, 0, 0, 0.13);
+    padding: 30px;
+  }
+
+  .ctaTitle {
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+
+  .ctaTitle br {
+    display: none;
+  }
+
+  .ctaDescription,
+  .ctaDescriptionList {
+    font-size: 18px;
+    margin-bottom: 24px;
+    max-width: none;
+  }
+
+  .ctaButton {
+    width: 100%;
+    max-width: none;
+  }
+
+  .section {
+    padding: 0 16px;
+    padding-top: 40px;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    min-height: unset;
+    justify-content: center;
+    align-items: flex-end;
+  }
+
+  .heroTitle {
+    display: none;
+  }
+
+  .heroImageWrap {
+    align-self: flex-end;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 389px;
+  }
+
+  .heroImage {
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    object-position: bottom center;
+  }
+
+  .fittingBlock {
+    margin-top: 40px;
+  }
+
+  .fittingTitle {
+    font-weight: 500;
+    font-size: 24px;
+    padding-bottom: 24px;
+  }
+
+  .fittingList {
+    flex-direction: column;
+  }
+
+  .fittingText {
+    font-size: 18px;
+  }
+
+  .directionsBlock {
+    margin-top: 40px;
+  }
+
+  .directionsTitle {
+    font-weight: 500;
+    font-size: 24px;
+    padding-bottom: 24px;
+  }
+
+  .directionsList {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .directionsText {
+    font-size: 18px;
+  }
+}

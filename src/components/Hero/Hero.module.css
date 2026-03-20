@@ -1,0 +1,76 @@
+/* ===== PC / Desktop ===== */
+
+.hero {
+  margin-top: 60px;
+}
+
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: row;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 60px;
+  line-height: 100%;
+  color: #000;
+  margin: 0;
+}
+
+.bubbleWrapper {
+  position: relative;
+  flex-shrink: 0;
+  padding-bottom: 20px;
+}
+
+.bubble {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 110%;
+  color: #202020;
+  background: #bcec30;
+  border-radius: 5px;
+  padding: 16px 20px;
+}
+
+.bubbleTail {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 31px;
+  height: 36px;
+}
+
+/* ===== Adaptive (max-width: 1160px) ===== */
+
+@media (max-width: 1160px) {
+  .hero {
+    margin-top: 40px;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .title {
+    font-size: 32px;
+    line-height: 110%;
+  }
+
+  .titleBr {
+    display: none;
+  }
+
+  .bubbleWrapper {
+    display: none;
+  }
+}

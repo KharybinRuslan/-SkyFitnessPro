@@ -1,0 +1,55 @@
+# Зависимости
+node_modules/
+
+# По запросу: локальная папка / справочные файлы не в репозитории
+fitness/
+
+POSTMAN_REQUESTS.md
+PROJECT.md
+Технологии React.txt
+ЛОКАЛЬНО-И-ДЕПЛОЙ.md
+
+# Сборка (Vite)
+dist/
+dist-ssr/
+
+# Переменные окружения (секреты и локальные URL)
+.env
+.env.local
+.env.*.local
+*.local
+
+# Логи
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Кэш и инструменты
+.cache/
+.parcel-cache/
+.eslintcache
+.vite/
+
+# ОС и редакторы
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Тесты / покрытие
+coverage/
+
+# Прочее
+*.pem
