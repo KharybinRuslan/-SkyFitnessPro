@@ -1,0 +1,175 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  min-height: 100vh;
+  background: #0000007a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 30px;
+  padding: 40px;
+  box-shadow: 0 4px 67px -12px rgba(0, 0, 0, 0.13);
+  width: 100%;
+  max-width: 360px;
+  margin: auto;
+}
+
+.logo {
+  display: block;
+  height: 36px;
+  width: auto;
+  margin: 0 auto;
+}
+
+.content {
+  margin-top: 48px;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid #d0cece;
+  border-radius: 8px;
+  padding: 16px 18px;
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  color: #000;
+  background: #fff;
+  outline: none;
+}
+
+.input::placeholder {
+  color: #999;
+}
+
+.inputError {
+  border: 1px solid #db0030 !important;
+}
+
+.errorMessage {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 110%;
+  text-align: center;
+  color: #db0030;
+  padding-top: 10px;
+  margin: 0;
+}
+
+.successMessage {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 110%;
+  text-align: center;
+  color: #2e7d32;
+  padding-top: 10px;
+  margin: 0;
+}
+
+.buttons {
+  margin-top: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Войти - primary button */
+.loginButton {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 110%;
+  color: #000;
+  background: #bcec30;
+  border: none;
+  border-radius: 46px;
+  padding: 16px 26px;
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+.loginButton:hover:not(:disabled) {
+  color: #000;
+  background: #c6ff00;
+}
+
+.loginButton:active:not(:disabled) {
+  color: #fff;
+  background: #000;
+}
+
+/* Inactive: Войти */
+.loginButton.inactive,
+.loginButton:disabled {
+  color: #999;
+  background: #f7f7f7;
+  cursor: not-allowed;
+}
+
+/* Зарегистрироваться - secondary button */
+.registerButton {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 110%;
+  color: #000;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 46px;
+  padding: 16px 26px;
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.registerButton:hover:not(:disabled) {
+  color: #000;
+  border: 1px solid #000;
+  background: #f7f7f7;
+}
+
+.registerButton:active:not(:disabled) {
+  color: #000;
+  border: 1px solid #000;
+  background: #e9eced;
+}
+
+/* Inactive: Зарегистрироваться */
+.registerButton.inactive,
+.registerButton:disabled {
+  color: #999;
+  border: 1px solid #999;
+  background: #e9eced;
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .modal {
+    border-radius: 30px;
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 100%;
+  }
+}

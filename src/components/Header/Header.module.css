@@ -1,0 +1,244 @@
+/* ===== PC / Desktop ===== */
+
+.header {
+  margin-top: 50px;
+}
+
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 52px;
+}
+
+.logoLink {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
+  align-items: flex-start;
+}
+
+.logo {
+  display: block;
+  height: 36px;
+  width: auto;
+}
+
+.tagline {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 110%;
+  color: #000;
+  opacity: 0.5;
+}
+
+.loginButton {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 110%;
+  text-align: center;
+  color: #000;
+  background: #bcec30;
+  border: none;
+  border-radius: 46px;
+  padding: 16px 26px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.loginButton:hover {
+  background: #c6ff00;
+}
+
+.userBlock {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.userTrigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+}
+
+.avatar {
+  display: flex;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.avatarImg {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.userName {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 110%;
+  text-align: right;
+  color: #000;
+}
+
+.chevron {
+  display: flex;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 250px;
+  background: #fff;
+  border-radius: 30px;
+  padding: 30px;
+  box-shadow: 0 4px 67px -12px rgba(0, 0, 0, 0.13);
+  z-index: 99;
+}
+
+.dropdownName {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 110%;
+  color: #000;
+  margin: 0;
+  text-align: center;
+}
+
+.dropdownEmail {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 110%;
+  color: #999;
+  margin: 10px 0 0;
+  text-align: center;
+}
+
+.dropdownButtons {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Мой профиль — стили как у кнопки Войти */
+.profileButton {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 110%;
+  color: #000;
+  background: #bcec30;
+  border: none;
+  border-radius: 46px;
+  padding: 16px 26px;
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+  width: 100%;
+}
+
+.profileButton:hover {
+  background: #c6ff00;
+}
+
+.profileButton:active {
+  color: #fff;
+  background: #000;
+}
+
+/* Выйти — стили как у кнопки Зарегистрироваться */
+.logoutButton {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 110%;
+  color: #000;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 46px;
+  padding: 16px 26px;
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+  width: 100%;
+}
+
+.logoutButton:hover {
+  background: #f7f7f7;
+}
+
+.logoutButton:active {
+  background: #e9eced;
+}
+
+/* ===== Adaptive (max-width: 1160px) ===== */
+
+@media (max-width: 1160px) {
+  .header {
+    margin-top: 40px;
+  }
+
+  .container {
+    padding: 0 16px;
+    flex-wrap: wrap;
+  }
+
+  .tagline {
+    display: none;
+  }
+
+  .loginButton {
+    padding: 8px 16px;
+  }
+
+  .userName {
+    font-size: 18px;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* ===== Adaptive (max-width: 720px) ===== */
+
+@media (max-width: 720px) {
+  .userTrigger {
+    gap: 10px;
+  }
+
+  .avatar {
+    margin-right: 0;
+  }
+
+  .userName {
+    display: none;
+  }
+}

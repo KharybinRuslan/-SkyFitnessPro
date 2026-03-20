@@ -1,0 +1,98 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 30px;
+  padding: 40px;
+  box-shadow: 0 4px 67px -12px rgba(0, 0, 0, 0.13);
+  width: 100%;
+  max-width: 480px;
+  margin: auto;
+}
+
+.title {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 110%;
+  color: #000;
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+.subtitle {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 140%;
+  color: #202020;
+  margin: 0 0 32px 0;
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cancelButton {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 110%;
+  color: #000;
+  background: #f7f7f7;
+  border: none;
+  border-radius: 46px;
+  padding: 16px 28px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cancelButton:hover:not(:disabled) {
+  background: #eee;
+}
+
+.cancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.confirmButton {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 110%;
+  color: #000;
+  background: #bcec30;
+  border: none;
+  border-radius: 46px;
+  padding: 16px 28px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.confirmButton:hover:not(:disabled) {
+  background: #a8d429;
+}
+
+.confirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
