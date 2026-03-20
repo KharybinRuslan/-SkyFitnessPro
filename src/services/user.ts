@@ -19,7 +19,7 @@ export async function addCourseOnServer(courseId: string, token: string): Promis
   try {
     const response = await fetch(url, {
       method: "POST",
-      headers: authHeaders(token, false),
+      headers: authHeaders(token, true),
       body: JSON.stringify({ courseId }),
     });
     if (!response.ok) {
