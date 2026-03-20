@@ -20,7 +20,7 @@ export function MyCoursesProvider({ children }: { children: ReactNode }) {
   const { user, isAuth, token } = useAuth();
   const [version, setVersion] = useState(0);
 
-  /** Подтянуть selectedCourses с API и слить с локальным списком (убирает лишние DELETE 500 / POST 400). */
+  /** Подтянуть selectedCourses с API — источник правды, без merge (убирает «фантомные» id и лишние DELETE). */
   const refresh = useCallback(() => {
     const email = user?.email;
     if (!token || !email) {
@@ -29,9 +29,7 @@ export function MyCoursesProvider({ children }: { children: ReactNode }) {
     }
     fetchSelectedCoursesFromServer(token).then((ids) => {
       if (ids !== null) {
-        const local = getMyCourseIds(email);
-        const merged = [...new Set([...ids, ...local])];
-        setMyCourseIds(email, merged);
+        setMyCourseIds(email, ids);
       }
       setVersion((v) => v + 1);
     });
@@ -58,7 +56,13 @@ export function MyCoursesProvider({ children }: { children: ReactNode }) {
       setMyCourseIds(email, [...ids, courseId]);
       setVersion((v) => v + 1);
       if (SYNC_COURSES_WITH_SERVER && token) {
-        addCourseOnServer(courseId, token).catch(() => undefined);
+        void addCourseOnServer(courseId, token).then((ok) => {
+          if (!ok || !email) return;
+          fetchSelectedCoursesFromServer(token).then((sids) => {
+            if (sids !== null) setMyCourseIds(email, sids);
+            setVersion((v) => v + 1);
+          });
+        });
       }
     },
     [user?.email, token]
@@ -72,7 +76,13 @@ export function MyCoursesProvider({ children }: { children: ReactNode }) {
       setMyCourseIds(email, ids);
       setVersion((v) => v + 1);
       if (SYNC_COURSES_WITH_SERVER && token) {
-        removeCourseOnServer(courseId, token).catch(() => undefined);
+        void removeCourseOnServer(courseId, token).then((ok) => {
+          if (ok || !email) return;
+          fetchSelectedCoursesFromServer(token).then((sids) => {
+            if (sids !== null) setMyCourseIds(email, sids);
+            setVersion((v) => v + 1);
+          });
+        });
       }
     },
     [user?.email, token]
