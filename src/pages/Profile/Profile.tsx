@@ -3,14 +3,8 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
 import { useMyCourses } from "../../context/useMyCourses";
 import { getCourses } from "../../services/courses";
-import {
-  getCourseWorkouts,
-  resetCourseProgress,
-} from "../../services/workouts";
-import {
-  getCompletedWorkoutIds,
-  clearCompletedWorkoutsForCourse,
-} from "../../utils/authStorage";
+import { getCourseWorkouts, resetCourseProgress } from "../../services/workouts";
+import { getCompletedWorkoutIds, clearCompletedWorkoutsForCourse } from "../../utils/authStorage";
 import type { CourseListItem } from "../../types/courses";
 import Footer from "../../components/Footer";
 import ChooseWorkoutModal from "../../components/ChooseWorkoutModal";
@@ -39,17 +33,14 @@ function PencilIcon({ className }: { className?: string }) {
   );
 }
 
-function displayUserName(
-  user: { email?: string; name?: string } | null,
-): string {
+function displayUserName(user: { email?: string; name?: string } | null): string {
   if (!user) return "";
   if (user.name) return user.name;
   if (user.email) return user.email.split("@")[0];
   return "";
 }
 
-const ACCEPTED_IMAGE_TYPES =
-  "image/png,image/svg+xml,image/jpeg,image/webp,image/gif";
+const ACCEPTED_IMAGE_TYPES = "image/png,image/svg+xml,image/jpeg,image/webp,image/gif";
 
 const COURSE_IMAGES: Record<string, string> = {
   yoga: "/ioga.png",
@@ -74,13 +65,7 @@ function getCourseImage(nameEN: string): string {
 
 function MinusIcon() {
   return (
-    <svg
-      width="27"
-      height="27"
-      viewBox="0 0 27 27"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -93,13 +78,7 @@ function MinusIcon() {
 
 function CalendarIconSmall() {
   return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M7.5 2.625C7.5 1.79657 6.82843 1.125 6 1.125C5.17157 1.125 4.5 1.79657 4.5 2.625C2.84315 2.625 1.5 3.96815 1.5 5.625H16.5C16.5 3.96815 15.1569 2.625 13.5 2.625C13.5 1.79657 12.8284 1.125 12 1.125C11.1716 1.125 10.5 1.79657 10.5 2.625H7.5Z"
         fill="#202020"
@@ -116,13 +95,7 @@ function CalendarIconSmall() {
 
 function ClockIconSmall() {
   return (
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 15 15"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -200,9 +173,7 @@ function MyCourseCard({
   const [showTooltip, setShowTooltip] = useState(false);
   const title = course.nameRU;
   const image = getCourseImage(course.nameEN);
-  const daysLabel = course.durationInDays
-    ? `${course.durationInDays} дней`
-    : "—";
+  const daysLabel = course.durationInDays ? `${course.durationInDays} дней` : "—";
   const minutesLabel = course.dailyDurationInMinutes
     ? `${course.dailyDurationInMinutes.from}–${course.dailyDurationInMinutes.to} мин/день`
     : "—";
@@ -210,11 +181,7 @@ function MyCourseCard({
   const bgColor = COURSE_COLORS[course._id] ?? "#f0f0f0";
 
   const buttonText =
-    progress >= 100
-      ? "Начать заново"
-      : progress > 0
-        ? "Продолжить"
-        : "Начать тренировки";
+    progress >= 100 ? "Начать заново" : progress > 0 ? "Продолжить" : "Начать тренировки";
 
   const handleButtonClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -274,16 +241,9 @@ function MyCourseCard({
         </div>
         <p className={styles.myCourseProgressLabel}>Прогресс {progress}%</p>
         <div className={styles.myCourseProgressBar}>
-          <div
-            className={styles.myCourseProgressFill}
-            style={{ width: `${progress}%` }}
-          />
+          <div className={styles.myCourseProgressFill} style={{ width: `${progress}%` }} />
         </div>
-        <button
-          type="button"
-          className={styles.myCourseButton}
-          onClick={handleButtonClick}
-        >
+        <button type="button" className={styles.myCourseButton} onClick={handleButtonClick}>
           {buttonText}
         </button>
       </div>
@@ -363,11 +323,7 @@ function ProfileAvatar({
         className={styles.avatarInput}
         aria-label="Загрузить фото профиля"
       />
-      {avatarUrl ? (
-        <img src={avatarUrl} alt="" className={styles.avatarImage} />
-      ) : (
-        defaultSvg
-      )}
+      {avatarUrl ? <img src={avatarUrl} alt="" className={styles.avatarImage} /> : defaultSvg}
     </label>
   );
 }
@@ -375,8 +331,7 @@ function ProfileAvatar({
 export default function Profile() {
   const navigate = useNavigate();
   const { isAuth, isRestoring, user, logout, updateUser, token } = useAuth();
-  const { myCourseIds, removeCourse, getProgress, setProgress, refresh } =
-    useMyCourses();
+  const { myCourseIds, removeCourse, getProgress, setProgress, refresh } = useMyCourses();
   const [isEditingName, setIsEditingName] = useState(false);
   const [editNameValue, setEditNameValue] = useState("");
   const [allCourses, setAllCourses] = useState<CourseListItem[]>([]);
@@ -492,11 +447,7 @@ export default function Profile() {
                     maxLength={100}
                   />
                   <div className={styles.nameEditActions}>
-                    <button
-                      type="button"
-                      className={styles.nameSaveButton}
-                      onClick={saveName}
-                    >
+                    <button type="button" className={styles.nameSaveButton} onClick={saveName}>
                       Сохранить
                     </button>
                     <button
@@ -523,11 +474,7 @@ export default function Profile() {
                 </div>
               )}
               <p className={styles.login}>Эл. почта: {profileEmail || "—"}</p>
-              <button
-                type="button"
-                className={styles.logoutButton}
-                onClick={logout}
-              >
+              <button type="button" className={styles.logoutButton} onClick={logout}>
                 Выйти
               </button>
             </div>
@@ -580,10 +527,7 @@ export default function Profile() {
           try {
             await resetCourseProgress(startOverModal.courseId, token);
             setProgress(startOverModal.courseId, 0);
-            clearCompletedWorkoutsForCourse(
-              profileEmail,
-              startOverModal.courseId,
-            );
+            clearCompletedWorkoutsForCourse(profileEmail, startOverModal.courseId);
             refresh();
             setStartOverModal(null);
           } catch {

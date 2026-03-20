@@ -33,13 +33,7 @@ function difficultyToLevel(difficulty: string | undefined): number {
 
 function PlusIcon() {
   return (
-    <svg
-      width="27"
-      height="27"
-      viewBox="0 0 27 27"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -65,13 +59,7 @@ function MinusIcon() {
 
 function CalendarIcon() {
   return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M7.5 2.625C7.5 1.79657 6.82843 1.125 6 1.125C5.17157 1.125 4.5 1.79657 4.5 2.625C2.84315 2.625 1.5 3.96815 1.5 5.625H16.5C16.5 3.96815 15.1569 2.625 13.5 2.625C13.5 1.79657 12.8284 1.125 12 1.125C11.1716 1.125 10.5 1.79657 10.5 2.625H7.5Z"
         fill="#202020"
@@ -88,13 +76,7 @@ function CalendarIcon() {
 
 function ClockIcon() {
   return (
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 15 15"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -155,7 +137,14 @@ interface CourseCardProps {
   onRemoveCourse?: (courseId: string) => void;
 }
 
-function CourseCard({ course, isAuth, isInMyCourses, onLoginClick, onAddCourse, onRemoveCourse }: CourseCardProps) {
+function CourseCard({
+  course,
+  isAuth,
+  isInMyCourses,
+  onLoginClick,
+  onAddCourse,
+  onRemoveCourse,
+}: CourseCardProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const title = course.nameRU;
   const image = getCourseImage(course.nameEN);
@@ -165,10 +154,9 @@ function CourseCard({ course, isAuth, isInMyCourses, onLoginClick, onAddCourse, 
     : workoutCount
       ? `${workoutCount} занятий`
       : "—";
-  const minutesLabel =
-    course.dailyDurationInMinutes
-      ? `${course.dailyDurationInMinutes.from}–${course.dailyDurationInMinutes.to} мин/день`
-      : "—";
+  const minutesLabel = course.dailyDurationInMinutes
+    ? `${course.dailyDurationInMinutes.from}–${course.dailyDurationInMinutes.to} мин/день`
+    : "—";
   const difficultyLevel = difficultyToLevel(course.difficulty);
 
   const isRemoveMode = isAuth && isInMyCourses;

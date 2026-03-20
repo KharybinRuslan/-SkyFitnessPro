@@ -8,7 +8,14 @@ import styles from "./ChooseWorkoutModal.module.css";
 
 function CompletedIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -21,7 +28,14 @@ function CompletedIcon() {
 
 function IncompleteIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
       <circle cx="10" cy="10" r="9.5" stroke="black" />
     </svg>
   );
@@ -70,7 +84,9 @@ export default function ChooseWorkoutModal({
         ]);
         if (!cancelled) {
           setWorkouts(list);
-          const fromApi = progress?.workoutsProgress?.filter((w) => w.workoutCompleted).map((w) => w.workoutId) ?? [];
+          const fromApi =
+            progress?.workoutsProgress?.filter((w) => w.workoutCompleted).map((w) => w.workoutId) ??
+            [];
           const fromStorage = getCompletedWorkoutIds(email, courseId);
           const ids = fromApi.length > 0 ? fromApi : fromStorage;
           setCompletedWorkoutIds(ids);
@@ -108,7 +124,13 @@ export default function ChooseWorkoutModal({
   if (!isOpen) return null;
 
   const content = (
-    <div className={styles.overlay} onClick={handleOverlayClick} role="dialog" aria-modal="true" aria-labelledby="choose-workout-title">
+    <div
+      className={styles.overlay}
+      onClick={handleOverlayClick}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="choose-workout-title"
+    >
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <h2 id="choose-workout-title" className={styles.title}>
           Выберите тренировку

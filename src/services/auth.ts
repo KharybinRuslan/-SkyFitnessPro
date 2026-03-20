@@ -6,13 +6,10 @@ import type {
   RegisterPayload,
 } from "../types/auth";
 
-const baseUrl =
-  import.meta.env.VITE_API_URL || "https://wedev-api.sky.pro/api/fitness";
+const baseUrl = import.meta.env.VITE_API_URL || "https://wedev-api.sky.pro/api/fitness";
 
-const authLoginPath =
-  import.meta.env.VITE_API_AUTH_LOGIN || "/auth/login";
-const authRegisterPath =
-  import.meta.env.VITE_API_AUTH_REGISTER || "/auth/register";
+const authLoginPath = import.meta.env.VITE_API_AUTH_LOGIN || "/auth/login";
+const authRegisterPath = import.meta.env.VITE_API_AUTH_REGISTER || "/auth/register";
 
 export interface NormalizedAuthResult {
   token: string;
@@ -22,11 +19,7 @@ export interface NormalizedAuthResult {
 function normalizeAuthResponse(body: unknown): NormalizedAuthResult | null {
   if (!body || typeof body !== "object") return null;
   const data = body as AuthSuccessResponse;
-  const token =
-    data.token ??
-    data.accessToken ??
-    data.data?.token ??
-    data.data?.accessToken;
+  const token = data.token ?? data.accessToken ?? data.data?.token ?? data.data?.accessToken;
   const user = data.user ?? data.data?.user ?? null;
   if (!token || typeof token !== "string") return null;
   return { token, user: user ?? null };
@@ -37,8 +30,7 @@ function extractErrorMessage(response: Response, body: unknown): string {
     const err = body as ApiErrorResponse;
     if (typeof err.message === "string" && err.message) return err.message;
     if (typeof err.error === "string" && err.error) return err.error;
-    if (Array.isArray(err.errors) && err.errors[0]?.message)
-      return err.errors[0].message;
+    if (Array.isArray(err.errors) && err.errors[0]?.message) return err.errors[0].message;
   }
   if (response.status === 401) return "Неверный email или пароль";
   if (response.status === 404)
@@ -47,10 +39,10 @@ function extractErrorMessage(response: Response, body: unknown): string {
   return "Произошла ошибка. Попробуйте ещё раз.";
 }
 
-export async function login(
-  payload: LoginPayload
-): Promise<NormalizedAuthResult> {
-  const url = authLoginPath.startsWith("http") ? authLoginPath : `${baseUrl.replace(/\/$/, "")}${authLoginPath.startsWith("/") ? "" : "/"}${authLoginPath}`;
+export async function login(payload: LoginPayload): Promise<NormalizedAuthResult> {
+  const url = authLoginPath.startsWith("http")
+    ? authLoginPath
+    : `${baseUrl.replace(/\/$/, "")}${authLoginPath.startsWith("/") ? "" : "/"}${authLoginPath}`;
   const response = await fetch(url, {
     method: "POST",
     body: JSON.stringify(payload),
@@ -77,10 +69,10 @@ export type RegisterResult =
   | { token: string; user: AuthUser | null; registrationOnly?: false }
   | { registrationOnly: true };
 
-export async function register(
-  payload: RegisterPayload
-): Promise<RegisterResult> {
-  const url = authRegisterPath.startsWith("http") ? authRegisterPath : `${baseUrl.replace(/\/$/, "")}${authRegisterPath.startsWith("/") ? "" : "/"}${authRegisterPath}`;
+export async function register(payload: RegisterPayload): Promise<RegisterResult> {
+  const url = authRegisterPath.startsWith("http")
+    ? authRegisterPath
+    : `${baseUrl.replace(/\/$/, "")}${authRegisterPath.startsWith("/") ? "" : "/"}${authRegisterPath}`;
   const response = await fetch(url, {
     method: "POST",
     body: JSON.stringify(payload),

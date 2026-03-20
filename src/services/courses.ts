@@ -1,7 +1,6 @@
 import type { CourseListItem, CourseDetails } from "../types/courses";
 
-const baseUrl =
-  import.meta.env.VITE_API_URL || "https://wedev-api.sky.pro/api/fitness";
+const baseUrl = import.meta.env.VITE_API_URL || "https://wedev-api.sky.pro/api/fitness";
 
 export async function getCourses(): Promise<CourseListItem[]> {
   const url = `${baseUrl.replace(/\/$/, "")}/courses`;

@@ -21,7 +21,14 @@ function displayUserEmail(user: { email?: string; name?: string } | null): strin
 
 function AvatarIcon() {
   return (
-    <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+    <svg
+      width="42"
+      height="42"
+      viewBox="0 0 42 42"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -34,8 +41,19 @@ function AvatarIcon() {
 
 function ChevronIcon() {
   return (
-    <svg width="13" height="8" viewBox="0 0 13 8" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <path d="M12.0624 0.707154L6.38477 6.38477L0.707152 0.707154" stroke="black" strokeWidth="2" />
+    <svg
+      width="13"
+      height="8"
+      viewBox="0 0 13 8"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
+      <path
+        d="M12.0624 0.707154L6.38477 6.38477L0.707152 0.707154"
+        stroke="black"
+        strokeWidth="2"
+      />
     </svg>
   );
 }
@@ -64,9 +82,7 @@ export default function Header({ onLoginClick }: Props) {
       <div className={styles.container}>
         <a href="/" className={styles.logoLink}>
           <img src="/logo.svg" alt="SkyFitnessPro" className={styles.logo} />
-          <span className={styles.tagline}>
-            Онлайн-тренировки для занятий дома
-          </span>
+          <span className={styles.tagline}>Онлайн-тренировки для занятий дома</span>
         </a>
         {isAuth ? (
           <div className={styles.userBlock} ref={dropdownRef}>
@@ -116,11 +132,7 @@ export default function Header({ onLoginClick }: Props) {
             )}
           </div>
         ) : (
-          <button
-            type="button"
-            className={styles.loginButton}
-            onClick={onLoginClick}
-          >
+          <button type="button" className={styles.loginButton} onClick={onLoginClick}>
             Войти
           </button>
         )}

@@ -112,9 +112,7 @@ export default function Course({ onLoginClick }: CourseProps) {
     if (!courseId) return;
     getCourseById(courseId)
       .then(setCourse)
-      .catch((err) =>
-        setError(err instanceof Error ? err.message : "Ошибка загрузки"),
-      )
+      .catch((err) => setError(err instanceof Error ? err.message : "Ошибка загрузки"))
       .finally(() => setLoading(false));
   }, [courseId]);
 
@@ -209,9 +207,7 @@ export default function Course({ onLoginClick }: CourseProps) {
                 ))}
               </ul>
             ) : (
-              course.description && (
-                <p className={styles.ctaDescription}>{course.description}</p>
-              )
+              course.description && <p className={styles.ctaDescription}>{course.description}</p>
             )}
             {isAuth ? (
               myCourseIds.includes(course._id) ? (
@@ -232,11 +228,7 @@ export default function Course({ onLoginClick }: CourseProps) {
                 </button>
               )
             ) : (
-              <button
-                type="button"
-                className={styles.ctaButton}
-                onClick={() => onLoginClick?.()}
-              >
+              <button type="button" className={styles.ctaButton} onClick={() => onLoginClick?.()}>
                 Войдите, чтобы добавить курс
               </button>
             )}

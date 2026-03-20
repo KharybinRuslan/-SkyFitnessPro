@@ -10,15 +10,11 @@ export function validateEmail(value: string): string | null {
 
 export function validatePassword(value: string): string | null {
   if (!value) return "Введите пароль";
-  if (value.length < MIN_PASSWORD_LENGTH)
-    return "Пароль должен быть не менее 6 символов";
+  if (value.length < MIN_PASSWORD_LENGTH) return "Пароль должен быть не менее 6 символов";
   return null;
 }
 
-export function validateRepeatPassword(
-  password: string,
-  repeatPassword: string
-): string | null {
+export function validateRepeatPassword(password: string, repeatPassword: string): string | null {
   if (!repeatPassword) return "Повторите пароль";
   if (password !== repeatPassword) return "Пароли не совпадают";
   return null;

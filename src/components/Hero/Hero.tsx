@@ -1,4 +1,4 @@
-import styles from './Hero.module.css'
+import styles from "./Hero.module.css";
 
 function SpeechBubbleTail() {
   return (
@@ -15,7 +15,7 @@ function SpeechBubbleTail() {
         fill="#BCEC30"
       />
     </svg>
-  )
+  );
 }
 
 export default function Hero() {
@@ -24,8 +24,7 @@ export default function Hero() {
       <div className={styles.container}>
         <h1 className={styles.title}>
           Начните заниматься спортом
-          <br className={styles.titleBr} />
-          и улучшите качество жизни
+          <br className={styles.titleBr} />и улучшите качество жизни
         </h1>
         <div className={styles.bubbleWrapper}>
           <div className={styles.bubble}>
@@ -37,5 +36,5 @@ export default function Hero() {
         </div>
       </div>
     </section>
-  )
+  );
 }

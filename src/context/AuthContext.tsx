@@ -2,8 +2,21 @@ import { useCallback, useMemo, useState, type ReactNode } from "react";
 import type { AuthUser } from "../types/auth";
 import type { LoginPayload, RegisterPayload } from "../types/auth";
 import * as authService from "../services/auth";
-import { getAuthData, setAuthData, clearAuthData, getStoredAvatar, setStoredAvatar, getStoredUserName, setStoredUserName } from "../utils/authStorage";
-import { AuthContext, type AuthContextValue, type AuthState, type RegisterOutcome } from "./authContextState";
+import {
+  getAuthData,
+  setAuthData,
+  clearAuthData,
+  getStoredAvatar,
+  setStoredAvatar,
+  getStoredUserName,
+  setStoredUserName,
+} from "../utils/authStorage";
+import {
+  AuthContext,
+  type AuthContextValue,
+  type AuthState,
+  type RegisterOutcome,
+} from "./authContextState";
 
 function mergeStoredProfile(email: string | undefined, user: AuthUser): AuthUser {
   if (!email) return user;

@@ -17,14 +17,18 @@ export default function StartOverConfirmModal({
   if (!isOpen) return null;
 
   const content = (
-    <div className={styles.overlay} onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="start-over-title">
+    <div
+      className={styles.overlay}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="start-over-title"
+    >
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <h2 id="start-over-title" className={styles.title}>
           Вы уверены, что хотите начать заново?
         </h2>
-        <p className={styles.subtitle}>
-          При подтверждении весь прогресс будет сброшен.
-        </p>
+        <p className={styles.subtitle}>При подтверждении весь прогресс будет сброшен.</p>
         <div className={styles.actions}>
           <button
             type="button"

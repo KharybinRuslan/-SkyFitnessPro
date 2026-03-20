@@ -7,8 +7,7 @@ import type {
 
 /** Базовый URL API: https://wedev-api.sky.pro/api + /fitness (см. документацию /api/fitness) */
 const API_BASE = "https://wedev-api.sky.pro/api";
-const baseUrl =
-  import.meta.env.VITE_API_URL || `${API_BASE}/fitness`;
+const baseUrl = import.meta.env.VITE_API_URL || `${API_BASE}/fitness`;
 
 function authHeaders(token: string, withContentType = false): HeadersInit {
   const headers: HeadersInit = {
@@ -59,7 +58,12 @@ export async function getCourseProgress(
   const url = `${baseUrl.replace(/\/$/, "")}/users/me/progress?courseId=${encodeURIComponent(courseId)}`;
   try {
     const response = await fetch(url, { headers: authHeaders(token) });
-    if (response.status === 401 || response.status === 400 || response.status === 500 || !response.ok) {
+    if (
+      response.status === 401 ||
+      response.status === 400 ||
+      response.status === 500 ||
+      !response.ok
+    ) {
       await response.text().catch(() => {});
       return null;
     }
@@ -98,9 +102,7 @@ export async function updateWorkoutProgress(
   const path = `/courses/${encodeURIComponent(courseId)}/workouts/${encodeURIComponent(workoutId)}`;
   const q = new URLSearchParams({ courseId, workoutId });
   const url = `${baseUrl.replace(/\/$/, "")}${path}?${q.toString()}`;
-  const payload: number[] = progressData.map((n) =>
-    Math.max(0, Math.floor(Number(n)) || 0)
-  );
+  const payload: number[] = progressData.map((n) => Math.max(0, Math.floor(Number(n)) || 0));
   const body = JSON.stringify({ progressData: payload });
   const response = await fetch(url, {
     method: "PATCH",
@@ -122,10 +124,7 @@ export async function updateWorkoutProgress(
 }
 
 /** PATCH /courses/[courseId]/reset — сбросить весь прогресс по курсу */
-export async function resetCourseProgress(
-  courseId: string,
-  token: string
-): Promise<void> {
+export async function resetCourseProgress(courseId: string, token: string): Promise<void> {
   const url = `${baseUrl.replace(/\/$/, "")}/courses/${encodeURIComponent(courseId)}/reset`;
   const response = await fetch(url, {
     method: "PATCH",

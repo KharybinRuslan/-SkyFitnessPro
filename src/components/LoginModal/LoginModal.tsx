@@ -1,11 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useAuth } from "../../context/useAuth";
-import {
-  validateEmail,
-  validatePassword,
-  validateRepeatPassword,
-} from "../../utils/validation";
+import { validateEmail, validatePassword, validateRepeatPassword } from "../../utils/validation";
 import styles from "./LoginModal.module.css";
 
 type Props = {
@@ -130,18 +126,14 @@ export default function LoginModal({ isOpen, onClose }: Props) {
   const isFormValid =
     mode === "login"
       ? !!email.trim() && !!password
-      : !!email.trim() &&
-        !!password &&
-        !!repeatPassword &&
-        password === repeatPassword;
+      : !!email.trim() && !!password && !!repeatPassword && password === repeatPassword;
 
   const isSubmitDisabled = !isFormValid || isLoading;
 
   useEffect(() => {
     if (isOpen) {
       const scrollbarWidth = getScrollbarWidth();
-      const hadScrollbar =
-        document.documentElement.scrollHeight > window.innerHeight;
+      const hadScrollbar = document.documentElement.scrollHeight > window.innerHeight;
       if (hadScrollbar) {
         document.body.style.paddingRight = `${scrollbarWidth}px`;
       }
@@ -171,12 +163,7 @@ export default function LoginModal({ isOpen, onClose }: Props) {
         : "Зарегистрироваться";
 
   return createPortal(
-    <div
-      className={styles.overlay}
-      onClick={handleOverlayClick}
-      role="dialog"
-      aria-modal="true"
-    >
+    <div className={styles.overlay} onClick={handleOverlayClick} role="dialog" aria-modal="true">
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <img src="/logo.svg" alt="SkyFitnessPro" className={styles.logo} />
         <form className={styles.content} onSubmit={handleSubmit}>
@@ -204,9 +191,7 @@ export default function LoginModal({ isOpen, onClose }: Props) {
                 setError(null);
                 setErrorField(null);
               }}
-              autoComplete={
-                mode === "login" ? "current-password" : "new-password"
-              }
+              autoComplete={mode === "login" ? "current-password" : "new-password"}
               disabled={isLoading}
             />
             {mode === "register" && (
@@ -225,9 +210,7 @@ export default function LoginModal({ isOpen, onClose }: Props) {
               />
             )}
           </div>
-          {successMessage && (
-            <p className={styles.successMessage}>{successMessage}</p>
-          )}
+          {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
           {error && <p className={styles.errorMessage}>{error}</p>}
           <div className={styles.buttons}>
             {mode === "login" ? (
@@ -271,6 +254,6 @@ export default function LoginModal({ isOpen, onClose }: Props) {
         </form>
       </div>
     </div>,
-    document.body,
+    document.body
   );
 }

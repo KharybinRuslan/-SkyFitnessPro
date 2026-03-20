@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.tsx";
 import { MyCoursesProvider } from "./context/MyCoursesContext";
 import Header from "./components/Header/index";
@@ -61,14 +55,8 @@ function AppRoutes({
           }
         />
         <Route path="/profile" element={<Profile />} />
-        <Route
-          path="/course/:courseId"
-          element={<Course onLoginClick={onLoginClick} />}
-        />
-        <Route
-          path="/course/:courseId/workout/:workoutId"
-          element={<Workout />}
-        />
+        <Route path="/course/:courseId" element={<Course onLoginClick={onLoginClick} />} />
+        <Route path="/course/:courseId/workout/:workoutId" element={<Workout />} />
       </Routes>
       <LoginModal isOpen={isLoginModalOpen} onClose={onCloseLoginModal} />
     </>

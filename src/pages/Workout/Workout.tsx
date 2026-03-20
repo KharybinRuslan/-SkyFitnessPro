@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState, useRef } from "react";
+import { useEffect, useLayoutEffect, useState, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
 import { useMyCourses } from "../../context/useMyCourses";
@@ -22,7 +22,14 @@ function progressNumberInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
 }
 
 const SuccessCheckIcon = () => (
-  <svg width="57" height="57" viewBox="0 0 57 57" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+  <svg
+    width="57"
+    height="57"
+    viewBox="0 0 57 57"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden
+  >
     <path
       fillRule="evenodd"
       clipRule="evenodd"
@@ -50,6 +57,11 @@ export default function Workout() {
   const formFieldsScrollRef = useRef<HTMLDivElement>(null);
   const [formScrollOverflow, setFormScrollOverflow] = useState(false);
 
+  const closeProgressForm = useCallback(() => {
+    setFormScrollOverflow(false);
+    setShowProgressForm(false);
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
     queueMicrotask(() => {
@@ -71,7 +83,8 @@ export default function Workout() {
         .then(async ([w, , list, progress]) => {
           if (cancelled) return;
           // list всегда для текущего courseId; ищем тренировку только по _id (name в запросы не уходит)
-          let workoutData: WorkoutDetails | null = w ?? list?.find((wo) => wo._id === workoutId) ?? null;
+          let workoutData: WorkoutDetails | null =
+            w ?? list?.find((wo) => wo._id === workoutId) ?? null;
           if (!workoutData) throw new Error("Тренировка не найдена");
           const fromList = list?.find((wo) => wo._id === workoutId);
           if (fromList) {
@@ -110,16 +123,16 @@ export default function Workout() {
     };
   }, [courseId, workoutId, token]);
 
-  useEffect(() => () => {
-    if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
+    },
+    []
+  );
 
   /** padding справа у полей только если блок реально скроллится */
   useLayoutEffect(() => {
-    if (!showProgressForm) {
-      setFormScrollOverflow(false);
-      return;
-    }
+    if (!showProgressForm) return;
     const check = () => {
       const node = formFieldsScrollRef.current;
       if (!node) return;
@@ -149,7 +162,7 @@ export default function Workout() {
     updateWorkoutProgress(courseId, workoutId, payload, token)
       .then(() => {
         setProgressData([...payload]);
-        setShowProgressForm(false);
+        closeProgressForm();
         setShowSuccessPopup(true);
         setWorkoutCompleted(email, courseId, workoutId);
         if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
@@ -158,7 +171,9 @@ export default function Workout() {
           const completedIds = getCompletedWorkoutIds(email, courseId);
           const percent = list.length
             ? Math.round((completedIds.length / list.length) * 100)
-            : (completedIds.length > 0 ? 100 : 0);
+            : completedIds.length > 0
+              ? 100
+              : 0;
           setCourseProgress(courseId, Math.min(100, percent));
         };
         getCourseWorkouts(courseId, token).then((list) => {
@@ -239,47 +254,44 @@ export default function Workout() {
                 Нет данных об упражнениях для этой тренировки. Попробуйте обновить страницу позже.
               </span>
             </li>
-          ) : exercises.map((ex, i) => {
-            const q = ex.quantity || 1;
-            const value = progressData[i] ?? 0;
-            const percent = Math.min(100, Math.round((value / q) * 100));
-            const displayName = getExerciseDisplayName(ex.name);
-            return (
-              <li key={ex._id} className={styles.exerciseItem}>
-                <span className={styles.exerciseLabel}>
-                  {displayName} {percent}%
-                </span>
-                <svg
-                  className={styles.progressBarSvg}
-                  viewBox="0 0 320 6"
-                  preserveAspectRatio="none"
-                  aria-hidden
-                >
-                  <rect width="320" height="6" rx="3" fill="#F7F7F7" />
-                  <rect
-                    width={320 * (percent / 100)}
-                    height="6"
-                    rx="3"
-                    fill="#00c1ff"
-                  />
-                </svg>
-              </li>
-            );
-          })}
+          ) : (
+            exercises.map((ex, i) => {
+              const q = ex.quantity || 1;
+              const value = progressData[i] ?? 0;
+              const percent = Math.min(100, Math.round((value / q) * 100));
+              const displayName = getExerciseDisplayName(ex.name);
+              return (
+                <li key={ex._id} className={styles.exerciseItem}>
+                  <span className={styles.exerciseLabel}>
+                    {displayName} {percent}%
+                  </span>
+                  <svg
+                    className={styles.progressBarSvg}
+                    viewBox="0 0 320 6"
+                    preserveAspectRatio="none"
+                    aria-hidden
+                  >
+                    <rect width="320" height="6" rx="3" fill="#F7F7F7" />
+                    <rect width={320 * (percent / 100)} height="6" rx="3" fill="#00c1ff" />
+                  </svg>
+                </li>
+              );
+            })
+          )}
         </ul>
         {exercises.length > 0 && (
-        <button
-          type="button"
-          className={styles.progressButton}
-          onClick={() => setShowProgressForm(true)}
-        >
-          Заполнить свой прогресс
-        </button>
+          <button
+            type="button"
+            className={styles.progressButton}
+            onClick={() => setShowProgressForm(true)}
+          >
+            Заполнить свой прогресс
+          </button>
         )}
       </div>
 
       {showProgressForm && (
-        <div className={styles.formOverlay} onClick={() => setShowProgressForm(false)}>
+        <div className={styles.formOverlay} onClick={closeProgressForm}>
           <div className={styles.formModal} onClick={(e) => e.stopPropagation()}>
             <h3 className={styles.formTitle}>Мой прогресс</h3>
             <div ref={formFieldsScrollRef} className={styles.formFieldsScroll}>
@@ -317,11 +329,7 @@ export default function Workout() {
               </div>
             </div>
             <div className={styles.formActions}>
-              <button
-                type="button"
-                className={styles.formCancel}
-                onClick={() => setShowProgressForm(false)}
-              >
+              <button type="button" className={styles.formCancel} onClick={closeProgressForm}>
                 Отмена
               </button>
               <button
