@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { useAuth } from "./useAuth";
 import {
-  getMyCourseIds,
-  setMyCourseIds,
-  getMyCourseProgress,
-  setMyCourseProgress,
-} from "../utils/authStorage";
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { useAuth } from "./useAuth";
+import { getMyCourseProgress, setMyCourseProgress } from "../utils/authStorage";
 import {
   addCourseOnServer,
   fetchSelectedCoursesFromServer,
@@ -13,79 +15,108 @@ import {
 } from "../services/user";
 import { MyCoursesContext, type MyCoursesContextValue } from "./myCoursesContextState";
 
-/** Синхронизация с API: при добавлении/удалении курса вызываем POST/DELETE /users/me/courses (нужно для сохранения прогресса). */
-const SYNC_COURSES_WITH_SERVER = true;
-
+/**
+ * Список «мои курсы» только с GET /api/fitness/users/me (selectedCourses).
+ * Добавление/удаление: POST/DELETE по POSTMAN_REQUESTS.md, без localStorage для id.
+ */
 export function MyCoursesProvider({ children }: { children: ReactNode }) {
   const { user, isAuth, token } = useAuth();
-  const [version, setVersion] = useState(0);
+  const [myCourseIds, setMyCourseIds] = useState<string[]>([]);
+  const [myCoursesInitialized, setMyCoursesInitialized] = useState(false);
+  const [pendingSyncIds, setPendingSyncIds] = useState<string[]>([]);
+  const [progressVersion, setProgressVersion] = useState(0);
 
-  /** Подтянуть selectedCourses с API — источник правды, без merge (убирает «фантомные» id и лишние DELETE). */
-  const refresh = useCallback(() => {
-    const email = user?.email;
-    if (!token || !email) {
-      setVersion((v) => v + 1);
+  const myCourseIdsRef = useRef(myCourseIds);
+  myCourseIdsRef.current = myCourseIds;
+
+  const syncPendingRef = useRef<Set<string>>(new Set());
+
+  const loadFromServer = useCallback(async () => {
+    if (!token) {
+      setMyCourseIds([]);
+      setMyCoursesInitialized(true);
       return;
     }
-    fetchSelectedCoursesFromServer(token).then((ids) => {
-      if (ids !== null) {
-        setMyCourseIds(email, ids);
-      }
-      setVersion((v) => v + 1);
+    const ids = await fetchSelectedCoursesFromServer(token);
+    if (ids !== null) {
+      setMyCourseIds(ids);
+    }
+    setMyCoursesInitialized(true);
+  }, [token]);
+
+  const refresh = useCallback(() => {
+    if (!token) return;
+    void fetchSelectedCoursesFromServer(token).then((ids) => {
+      if (ids !== null) setMyCourseIds(ids);
     });
-  }, [token, user?.email]);
+  }, [token]);
 
   useEffect(() => {
-    if (!isAuth || !token || !user?.email) return;
-    refresh();
-  }, [isAuth, token, user?.email, refresh]);
+    if (!isAuth || !token) {
+      setMyCourseIds([]);
+      setMyCoursesInitialized(false);
+      syncPendingRef.current.clear();
+      setPendingSyncIds([]);
+      return;
+    }
+    setMyCoursesInitialized(false);
+    void loadFromServer();
+  }, [isAuth, token, loadFromServer]);
 
-  const myCourseIds = useMemo((): string[] => {
-    const email = user?.email;
-    if (!isAuth || !email) return [];
-    return getMyCourseIds(email);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- version нужен для перечитывания после add/remove
-  }, [isAuth, user?.email, version]);
+  const beginSync = useCallback((courseId: string): boolean => {
+    if (syncPendingRef.current.has(courseId)) return false;
+    syncPendingRef.current.add(courseId);
+    setPendingSyncIds((p) => (p.includes(courseId) ? p : [...p, courseId]));
+    return true;
+  }, []);
+
+  const endSync = useCallback((courseId: string) => {
+    syncPendingRef.current.delete(courseId);
+    setPendingSyncIds((p) => p.filter((id) => id !== courseId));
+  }, []);
 
   const addCourse = useCallback(
-    (courseId: string): void => {
-      const email = user?.email;
-      if (!email) return;
-      const ids = getMyCourseIds(email);
-      if (ids.includes(courseId)) return;
-      setMyCourseIds(email, [...ids, courseId]);
-      setVersion((v) => v + 1);
-      if (SYNC_COURSES_WITH_SERVER && token) {
-        void addCourseOnServer(courseId, token).then((ok) => {
-          if (!ok || !email) return;
-          fetchSelectedCoursesFromServer(token).then((sids) => {
-            if (sids !== null) setMyCourseIds(email, sids);
-            setVersion((v) => v + 1);
-          });
-        });
-      }
+    (courseId: string) => {
+      if (!isAuth || !token) return;
+      if (myCourseIdsRef.current.includes(courseId)) return;
+      if (!beginSync(courseId)) return;
+
+      setMyCourseIds((prev) => (prev.includes(courseId) ? prev : [...prev, courseId]));
+
+      void (async () => {
+        try {
+          await addCourseOnServer(courseId, token);
+        } finally {
+          const ids = await fetchSelectedCoursesFromServer(token);
+          if (ids !== null) setMyCourseIds(ids);
+          endSync(courseId);
+        }
+      })();
     },
-    [user?.email, token]
+    [isAuth, token, beginSync, endSync]
   );
 
   const removeCourse = useCallback(
-    (courseId: string): void => {
-      const email = user?.email;
-      if (!email) return;
-      const ids = getMyCourseIds(email).filter((id) => id !== courseId);
-      setMyCourseIds(email, ids);
-      setVersion((v) => v + 1);
-      if (SYNC_COURSES_WITH_SERVER && token) {
-        void removeCourseOnServer(courseId, token).then((ok) => {
-          if (ok || !email) return;
-          fetchSelectedCoursesFromServer(token).then((sids) => {
-            if (sids !== null) setMyCourseIds(email, sids);
-            setVersion((v) => v + 1);
-          });
-        });
-      }
+    (courseId: string) => {
+      if (!isAuth || !token) return;
+      if (!myCourseIdsRef.current.includes(courseId)) return;
+      if (!beginSync(courseId)) return;
+
+      setMyCourseIds((prev) => prev.filter((id) => id !== courseId));
+
+      void (async () => {
+        try {
+          const ok = await removeCourseOnServer(courseId, token);
+          if (!ok) {
+            const ids = await fetchSelectedCoursesFromServer(token);
+            if (ids !== null) setMyCourseIds(ids);
+          }
+        } finally {
+          endSync(courseId);
+        }
+      })();
     },
-    [user?.email, token]
+    [isAuth, token, beginSync, endSync]
   );
 
   const getProgress = useCallback(
@@ -95,8 +126,8 @@ export function MyCoursesProvider({ children }: { children: ReactNode }) {
       const progress = getMyCourseProgress(email);
       return progress[courseId] ?? 0;
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- version для актуального прогресса
-    [user?.email, version]
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- progressVersion для перечитывания из localStorage
+    [user?.email, progressVersion]
   );
 
   const setProgress = useCallback(
@@ -104,21 +135,39 @@ export function MyCoursesProvider({ children }: { children: ReactNode }) {
       const email = user?.email;
       if (!email) return;
       setMyCourseProgress(email, courseId, percent);
-      setVersion((v) => v + 1);
+      setProgressVersion((v) => v + 1);
     },
     [user?.email]
+  );
+
+  const myCoursesLoading = Boolean(isAuth && token && !myCoursesInitialized);
+
+  const isCourseSyncPending = useCallback(
+    (courseId: string) => pendingSyncIds.includes(courseId),
+    [pendingSyncIds]
   );
 
   const value = useMemo<MyCoursesContextValue>(
     () => ({
       myCourseIds,
+      myCoursesLoading,
+      isCourseSyncPending,
       addCourse,
       removeCourse,
       getProgress,
       setProgress,
       refresh,
     }),
-    [myCourseIds, addCourse, removeCourse, getProgress, setProgress, refresh]
+    [
+      myCourseIds,
+      myCoursesLoading,
+      isCourseSyncPending,
+      addCourse,
+      removeCourse,
+      getProgress,
+      setProgress,
+      refresh,
+    ]
   );
 
   return <MyCoursesContext.Provider value={value}>{children}</MyCoursesContext.Provider>;

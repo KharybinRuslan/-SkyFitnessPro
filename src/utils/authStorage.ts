@@ -4,7 +4,6 @@ const STORAGE_KEY_TOKEN = "skyfitness_auth_token";
 const STORAGE_KEY_USER = "skyfitness_auth_user";
 const STORAGE_KEY_AVATARS = "skyfitness_avatars";
 const STORAGE_KEY_NAMES = "skyfitness_user_names";
-const STORAGE_KEY_MY_COURSES = "skyfitness_my_courses";
 const STORAGE_KEY_MY_COURSE_PROGRESS = "skyfitness_my_course_progress";
 const STORAGE_KEY_COMPLETED_WORKOUTS = "skyfitness_completed_workouts";
 
@@ -101,29 +100,6 @@ function clearAuthData(): void {
   }
 }
 
-function getMyCourseIds(email: string): string[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY_MY_COURSES);
-    if (!raw) return [];
-    const map = JSON.parse(raw) as Record<string, string[]>;
-    return map[profileKey(email)] ?? [];
-  } catch {
-    return [];
-  }
-}
-
-function setMyCourseIds(email: string, ids: string[]): void {
-  try {
-    const key = profileKey(email);
-    const raw = localStorage.getItem(STORAGE_KEY_MY_COURSES);
-    const map = raw ? (JSON.parse(raw) as Record<string, string[]>) : {};
-    map[key] = ids;
-    localStorage.setItem(STORAGE_KEY_MY_COURSES, JSON.stringify(map));
-  } catch {
-    // ignore
-  }
-}
-
 function getMyCourseProgress(email: string): Record<string, number> {
   try {
     const raw = localStorage.getItem(STORAGE_KEY_MY_COURSE_PROGRESS);
@@ -198,8 +174,6 @@ export {
   getStoredUserName,
   setStoredUserName,
   clearAuthData,
-  getMyCourseIds,
-  setMyCourseIds,
   getMyCourseProgress,
   setMyCourseProgress,
   getCompletedWorkoutIds,
