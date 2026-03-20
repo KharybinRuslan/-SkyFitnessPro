@@ -2,6 +2,13 @@
 const API_BASE = "https://wedev-api.sky.pro/api";
 const baseUrl = import.meta.env.VITE_API_URL || `${API_BASE}/fitness`;
 
+function isDuplicateCourseMessage(msg: string): boolean {
+  const m = String(msg).toLowerCase();
+  return (
+    m.includes("уже") || m.includes("already") || m.includes("duplicate") || m.includes("exists")
+  );
+}
+
 function authHeaders(token: string, withContentType = false): HeadersInit {
   const headers: HeadersInit = {
     Authorization: `Bearer ${token}`,
@@ -37,9 +44,33 @@ export async function addCourseOnServer(courseId: string, token: string): Promis
         (msg === "Курс уже был добавлен!" || String(msg).includes("уже был добавлен"))
       )
         return;
+      /* 400 — часто «курс уже в профиле» при рассинхроне localStorage и сервера */
+      if (response.status === 400 && isDuplicateCourseMessage(String(msg))) return;
     }
   } catch {
     /* сеть: локальный список курсов уже обновлён */
+  }
+}
+
+/**
+ * GET /users/me — список курсов на сервере (selectedCourses).
+ * Нужен, чтобы localStorage совпадал с API и не сыпались DELETE 500 / POST 400.
+ */
+export async function fetchSelectedCoursesFromServer(token: string): Promise<string[] | null> {
+  const url = `${baseUrl.replace(/\/$/, "")}/users/me`;
+  try {
+    const response = await fetch(url, {
+      headers: authHeaders(token, false),
+    });
+    if (!response.ok) return null;
+    const data: unknown = await response.json().catch(() => null);
+    if (!data || typeof data !== "object") return null;
+    const record = data as { selectedCourses?: unknown; courses?: unknown };
+    const raw = record.selectedCourses ?? record.courses;
+    if (!Array.isArray(raw)) return null;
+    return raw.filter((id): id is string => typeof id === "string");
+  } catch {
+    return null;
   }
 }
 

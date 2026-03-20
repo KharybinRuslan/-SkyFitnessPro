@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useAuth } from "./useAuth";
 import {
   getMyCourseIds,
@@ -6,7 +6,11 @@ import {
   getMyCourseProgress,
   setMyCourseProgress,
 } from "../utils/authStorage";
-import { addCourseOnServer, removeCourseOnServer } from "../services/user";
+import {
+  addCourseOnServer,
+  fetchSelectedCoursesFromServer,
+  removeCourseOnServer,
+} from "../services/user";
 import { MyCoursesContext, type MyCoursesContextValue } from "./myCoursesContextState";
 
 /** Синхронизация с API: при добавлении/удалении курса вызываем POST/DELETE /users/me/courses (нужно для сохранения прогресса). */
@@ -16,9 +20,27 @@ export function MyCoursesProvider({ children }: { children: ReactNode }) {
   const { user, isAuth, token } = useAuth();
   const [version, setVersion] = useState(0);
 
+  /** Подтянуть selectedCourses с API и слить с локальным списком (убирает лишние DELETE 500 / POST 400). */
   const refresh = useCallback(() => {
-    setVersion((v) => v + 1);
-  }, []);
+    const email = user?.email;
+    if (!token || !email) {
+      setVersion((v) => v + 1);
+      return;
+    }
+    fetchSelectedCoursesFromServer(token).then((ids) => {
+      if (ids !== null) {
+        const local = getMyCourseIds(email);
+        const merged = [...new Set([...ids, ...local])];
+        setMyCourseIds(email, merged);
+      }
+      setVersion((v) => v + 1);
+    });
+  }, [token, user?.email]);
+
+  useEffect(() => {
+    if (!isAuth || !token || !user?.email) return;
+    refresh();
+  }, [isAuth, token, user?.email, refresh]);
 
   const myCourseIds = useMemo((): string[] => {
     const email = user?.email;
