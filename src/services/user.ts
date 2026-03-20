@@ -9,25 +9,22 @@ function isDuplicateCourseMessage(msg: string): boolean {
   );
 }
 
-function authHeaders(token: string, withContentType = false): HeadersInit {
-  const headers: HeadersInit = {
-    Authorization: `Bearer ${token}`,
-  };
-  if (withContentType) headers["Content-Type"] = "application/json";
-  return headers;
+function authHeaders(token: string): HeadersInit {
+  return { Authorization: `Bearer ${token}` };
 }
 
 /**
  * POST /api/fitness/users/me/courses — добавить курс на бэкенд (wedev-api.sky.pro).
- * Тело по документации: { "courseId": "..." }.
- * @returns true если курс на сервере можно считать добавленным (успех или «уже есть»)
+ * Тело: { "courseId": "..." } (JSON).
+ * Важно: wedev-api отвечает 400, если передать заголовок Content-Type: application/json —
+ * см. ответ API «…не умеет работать с этим заголовком, уберите его».
  */
 export async function addCourseOnServer(courseId: string, token: string): Promise<boolean> {
   const url = `${baseUrl.replace(/\/$/, "")}/users/me/courses`;
   try {
     const response = await fetch(url, {
       method: "POST",
-      headers: authHeaders(token, true),
+      headers: authHeaders(token),
       body: JSON.stringify({ courseId }),
     });
     if (response.ok) return true;
@@ -98,7 +95,7 @@ export async function fetchSelectedCoursesFromServer(token: string): Promise<str
   const url = `${baseUrl.replace(/\/$/, "")}/users/me`;
   try {
     const response = await fetch(url, {
-      headers: authHeaders(token, false),
+      headers: authHeaders(token),
     });
     if (!response.ok) return null;
     const data: unknown = await response.json().catch(() => null);
@@ -118,7 +115,7 @@ export async function removeCourseOnServer(courseId: string, token: string): Pro
   try {
     const response = await fetch(url, {
       method: "DELETE",
-      headers: authHeaders(token, false),
+      headers: authHeaders(token),
     });
     if (!response.ok) {
       await response.text().catch(() => "");

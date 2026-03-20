@@ -14,7 +14,7 @@ SPA для онлайн-тренировок дома: каталог курсо
 
 Данные курсов и прогресса запрашиваются с **fitness API** (по умолчанию `wedev-api.sky.pro`, см. `.env.example`).
 
-**«Мои курсы»** для авторизованного пользователя — только с бэкенда: `GET /api/fitness/users/me` (`selectedCourses`), добавление `POST …/users/me/courses`, удаление `DELETE …/users/me/courses/{courseId}` (см. **`POSTMAN_REQUESTS.md`**). В `localStorage` этот список не кешируется.
+**«Мои курсы»** для авторизованного пользователя — только с бэкенда: `GET /api/fitness/users/me` (`selectedCourses`), добавление `POST …/users/me/courses` (тело JSON `{"courseId":"…"}` **без** заголовка `Content-Type: application/json` — иначе wedev-api отвечает 400), удаление `DELETE …/users/me/courses/{courseId}` (см. **`POSTMAN_REQUESTS.md`**). В `localStorage` этот список не кешируется.
 
 ---
 
