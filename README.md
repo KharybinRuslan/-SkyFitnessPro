@@ -140,6 +140,49 @@ src/
 
 ---
 
+## Деплой (Netlify или Vercel)
+
+Проект — **статический фронт** после `npm run build` (папка **`dist/`**). API остаётся на `wedev-api.sky.pro`, отдельный бэкенд поднимать не нужно.
+
+В корне уже лежат:
+
+- **`netlify.toml`** — команда сборки и редиректы для React Router (нет 404 при обновлении `/profile`).
+- **`vercel.json`** — то же для Vercel.
+
+### Вариант A: Netlify
+
+1. Зарегистрируйся на [netlify.com](https://www.netlify.com/) (можно через GitHub).
+2. Положи проект в **репозиторий на GitHub** (если ещё нет): создай репозиторий → `git init` → commit → push.
+3. В Netlify: **Add new site → Import an existing project** → выбери GitHub и репозиторий.
+4. Настройки подтянутся из **`netlify.toml`**:
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+5. Нажми **Deploy**. Через минуту появится ссылка вида `https://random-name.netlify.app`.
+6. **Переменные окружения** (если используешь свой `VITE_API_URL`): Site settings → Environment variables → добавь `VITE_API_URL` → **Redeploy**.
+
+### Вариант B: Vercel
+
+1. Зарегистрируйся на [vercel.com](https://vercel.com/) (через GitHub удобнее).
+2. **Add New Project** → импорт репозитория с GitHub.
+3. Framework Preset: **Vite** (или оставь авто). Root — корень репо, Output — **`dist`** (обычно определяется сам).
+4. **Deploy**. Ссылка: `https://твой-проект.vercel.app`.
+5. При необходимости: Settings → Environment Variables → `VITE_API_URL` → redeploy.
+
+### Локальная проверка перед деплоем
+
+```bash
+npm run build
+npm run preview
+```
+
+Открой показанный URL и проверь главную, вход, `/profile` после обновления страницы.
+
+### Dokploy / Coolify
+
+Это **свой сервер** (VPS) и Docker — имеет смысл, когда уже есть хостинг и нужен полный контроль. Для учебного фронта быстрее **Netlify или Vercel**.
+
+---
+
 ## Лицензия
 
 Проект помечен как `private` в `package.json`; условия распространения задайте при необходимости сами.
