@@ -62,6 +62,11 @@
   line-height: 0;
 }
 
+.plusButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .plusIconInner {
   display: inline-block;
   line-height: 0;

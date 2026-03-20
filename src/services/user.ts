@@ -71,17 +71,26 @@ function normalizeCourseIdList(raw: unknown): string[] | null {
   return out;
 }
 
+function tryCoursesArrays(o: Record<string, unknown>): unknown {
+  if (Array.isArray(o.selectedCourses)) return o.selectedCourses;
+  if (Array.isArray(o.courses)) return o.courses;
+  if (Array.isArray(o.myCourses)) return o.myCourses;
+  return null;
+}
+
+/** Разные варианты JSON от GET /users/me (док: { email, selectedCourses }) */
 function pickSelectedCoursesPayload(data: unknown): unknown {
   if (!data || typeof data !== "object") return null;
   const r = data as Record<string, unknown>;
-  const nested = r.data;
-  if (nested && typeof nested === "object") {
-    const d = nested as Record<string, unknown>;
-    if (Array.isArray(d.selectedCourses)) return d.selectedCourses;
-    if (Array.isArray(d.courses)) return d.courses;
+  const direct = tryCoursesArrays(r);
+  if (direct) return direct;
+  for (const key of ["data", "user", "result", "body", "payload"]) {
+    const v = r[key];
+    if (v && typeof v === "object") {
+      const nested = tryCoursesArrays(v as Record<string, unknown>);
+      if (nested) return nested;
+    }
   }
-  if (Array.isArray(r.selectedCourses)) return r.selectedCourses;
-  if (Array.isArray(r.courses)) return r.courses;
   return null;
 }
 

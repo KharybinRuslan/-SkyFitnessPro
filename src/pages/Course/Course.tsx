@@ -103,7 +103,8 @@ type CourseProps = {
 export default function Course({ onLoginClick }: CourseProps) {
   const { courseId } = useParams<{ courseId: string }>();
   const { isAuth } = useAuth();
-  const { myCourseIds, addCourse, removeCourse } = useMyCourses();
+  const { myCourseIds, addCourse, removeCourse, myCoursesLoading, isCourseSyncPending } =
+    useMyCourses();
   const [course, setCourse] = useState<CourseDetails | null>(null);
   const [loading, setLoading] = useState(() => !!courseId);
   const [error, setError] = useState<string | null>(null);
@@ -215,6 +216,7 @@ export default function Course({ onLoginClick }: CourseProps) {
                   type="button"
                   className={styles.ctaButton}
                   onClick={() => removeCourse(course._id)}
+                  disabled={isCourseSyncPending(course._id)}
                 >
                   Удалить курс с профиля
                 </button>
@@ -223,6 +225,7 @@ export default function Course({ onLoginClick }: CourseProps) {
                   type="button"
                   className={styles.ctaButton}
                   onClick={() => addCourse(course._id)}
+                  disabled={myCoursesLoading || isCourseSyncPending(course._id)}
                 >
                   Добавить курс
                 </button>

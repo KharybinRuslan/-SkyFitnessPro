@@ -132,6 +132,9 @@ interface CourseCardProps {
   course: CourseListItem;
   isAuth: boolean;
   isInMyCourses: boolean;
+  /** Пока грузим selectedCourses с API или идёт синхронизация курса */
+  addDisabled?: boolean;
+  removeDisabled?: boolean;
   onLoginClick?: () => void;
   onAddCourse?: (courseId: string) => void;
   onRemoveCourse?: (courseId: string) => void;
@@ -141,6 +144,8 @@ function CourseCard({
   course,
   isAuth,
   isInMyCourses,
+  addDisabled = false,
+  removeDisabled = false,
   onLoginClick,
   onAddCourse,
   onRemoveCourse,
@@ -168,8 +173,10 @@ function CourseCard({
     if (!isAuth && onLoginClick) {
       onLoginClick();
     } else if (isRemoveMode && onRemoveCourse) {
+      if (removeDisabled) return;
       onRemoveCourse(course._id);
     } else if (isAuth && onAddCourse && !isInMyCourses) {
+      if (addDisabled) return;
       onAddCourse(course._id);
     }
   };
@@ -191,6 +198,9 @@ function CourseCard({
               className={styles.plusButton}
               onClick={handleIconClick}
               aria-label={tooltipText}
+              disabled={
+                isRemoveMode ? removeDisabled : isAuth && !isInMyCourses ? addDisabled : false
+              }
             >
               {isRemoveMode ? <MinusIcon /> : <PlusIcon />}
             </button>
@@ -232,7 +242,8 @@ export default function CourseCards({ onLoginClick }: CourseCardsProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { isAuth } = useAuth();
-  const { myCourseIds, addCourse, removeCourse } = useMyCourses();
+  const { myCourseIds, addCourse, removeCourse, myCoursesLoading, isCourseSyncPending } =
+    useMyCourses();
 
   useEffect(() => {
     getCourses()
@@ -282,6 +293,8 @@ export default function CourseCards({ onLoginClick }: CourseCardsProps) {
             course={course}
             isAuth={isAuth}
             isInMyCourses={myCourseIds.includes(course._id)}
+            addDisabled={myCoursesLoading || isCourseSyncPending(course._id)}
+            removeDisabled={isCourseSyncPending(course._id)}
             onLoginClick={onLoginClick}
             onAddCourse={addCourse}
             onRemoveCourse={removeCourse}

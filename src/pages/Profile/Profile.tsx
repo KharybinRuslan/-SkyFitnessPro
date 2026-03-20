@@ -159,6 +159,7 @@ function MyCourseCard({
   course,
   progress,
   onRemove,
+  removeDisabled,
   onStartOver,
   onStartOverClick,
   onOpenWorkoutModal,
@@ -166,6 +167,7 @@ function MyCourseCard({
   course: CourseListItem;
   progress: number;
   onRemove: () => void;
+  removeDisabled?: boolean;
   onStartOver: () => void;
   onStartOverClick?: (courseId: string, courseName: string) => void;
   onOpenWorkoutModal?: (courseId: string, courseName: string) => void;
@@ -210,8 +212,10 @@ function MyCourseCard({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              if (removeDisabled) return;
               onRemove();
             }}
+            disabled={removeDisabled}
             aria-label="Удалить курс"
           >
             <MinusIcon />
@@ -331,7 +335,8 @@ function ProfileAvatar({
 export default function Profile() {
   const navigate = useNavigate();
   const { isAuth, isRestoring, user, logout, updateUser, token } = useAuth();
-  const { myCourseIds, removeCourse, getProgress, setProgress, refresh } = useMyCourses();
+  const { myCourseIds, removeCourse, getProgress, setProgress, refresh, isCourseSyncPending } =
+    useMyCourses();
   const [isEditingName, setIsEditingName] = useState(false);
   const [editNameValue, setEditNameValue] = useState("");
   const [allCourses, setAllCourses] = useState<CourseListItem[]>([]);
@@ -489,6 +494,7 @@ export default function Profile() {
                     key={course._id}
                     course={course}
                     progress={getProgress(course._id)}
+                    removeDisabled={isCourseSyncPending(course._id)}
                     onRemove={() => removeCourse(course._id)}
                     onStartOver={() => setProgress(course._id, 0)}
                     onStartOverClick={(id, name) =>
