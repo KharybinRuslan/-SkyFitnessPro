@@ -14,13 +14,6 @@ import type { WorkoutDetails } from "../../types/workouts";
 import { toEmbedVideoUrl } from "../../utils/videoUrl";
 import styles from "./Workout.module.css";
 
-/** Только спиннер и стрелки ↑↓ — без ручного набора и вставки. */
-function progressNumberInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-  if (e.key === "Tab" || e.key === "Escape") return;
-  if (e.key === "ArrowUp" || e.key === "ArrowDown") return;
-  e.preventDefault();
-}
-
 const SuccessCheckIcon = () => (
   <svg
     width="57"
@@ -51,7 +44,8 @@ export default function Workout() {
   const [error, setError] = useState<string | null>(null);
   const [showProgressForm, setShowProgressForm] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-  const [formValues, setFormValues] = useState<number[]>([]);
+  /** Строки в модалке: можно очистить поле и набрать число; в payload уходит число после blur/save */
+  const [formInputDraft, setFormInputDraft] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const successTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const formFieldsScrollRef = useRef<HTMLDivElement>(null);
@@ -109,7 +103,6 @@ export default function Workout() {
           const wp = progress?.workoutsProgress?.find((p) => p.workoutId === workoutId);
           const data = wp?.progressData ?? (workoutData.exercises ?? []).map(() => 0);
           setProgressData(data);
-          setFormValues(data);
         })
         .catch((err: unknown) => {
           if (!cancelled) setError(err instanceof Error ? err.message : "Ошибка");
@@ -154,9 +147,12 @@ export default function Workout() {
   const handleSaveProgress = () => {
     if (!courseId || !workoutId || !token || !workout) return;
     const exercises = workout.exercises ?? [];
-    const payload: number[] = Array.from({ length: exercises.length }, (_, i) => {
-      const v = formValues[i];
-      return Math.max(0, Math.floor(Number(v) || 0));
+    const payload: number[] = exercises.map((ex, i) => {
+      const maxVal = Math.max(0, ex.quantity * 2) || 999;
+      const raw = (formInputDraft[i] ?? "").trim();
+      const n = raw === "" ? 0 : Number.parseInt(raw, 10);
+      const base = Number.isNaN(n) ? 0 : Math.max(0, Math.floor(n));
+      return Math.min(maxVal, base);
     });
     setSaving(true);
     updateWorkoutProgress(courseId, workoutId, payload, token)
@@ -283,7 +279,14 @@ export default function Workout() {
           <button
             type="button"
             className={styles.progressButton}
-            onClick={() => setShowProgressForm(true)}
+            onClick={() => {
+              const len = exercises.length;
+              const draft = Array.from({ length: len }, (_, i) =>
+                String(Math.max(0, Math.floor(Number(progressData[i]) || 0)))
+              );
+              setFormInputDraft(draft);
+              setShowProgressForm(true);
+            }}
           >
             Заполнить свой прогресс
           </button>
@@ -302,30 +305,46 @@ export default function Workout() {
                     : styles.formFieldsScrollInner
                 }
               >
-                {exercises.map((ex, i) => (
-                  <label key={ex._id} className={styles.formRow}>
-                    <span className={styles.formLabel}>{ex.name}</span>
-                    <input
-                      type="number"
-                      min={0}
-                      max={ex.quantity * 2 || 999}
-                      step={1}
-                      inputMode="none"
-                      autoComplete="off"
-                      value={formValues[i] ?? 0}
-                      onKeyDown={progressNumberInputKeyDown}
-                      onPaste={(e) => e.preventDefault()}
-                      onCut={(e) => e.preventDefault()}
-                      onDrop={(e) => e.preventDefault()}
-                      onChange={(e) => {
-                        const next = [...formValues];
-                        next[i] = parseInt(e.target.value, 10) || 0;
-                        setFormValues(next);
-                      }}
-                      className={styles.formInput}
-                    />
-                  </label>
-                ))}
+                {exercises.map((ex, i) => {
+                  const maxVal = Math.max(0, ex.quantity * 2) || 999;
+                  return (
+                    <label key={ex._id} className={styles.formRow}>
+                      <span className={styles.formLabel}>{ex.name}</span>
+                      <input
+                        type="number"
+                        min={0}
+                        max={maxVal}
+                        step={1}
+                        inputMode="numeric"
+                        autoComplete="off"
+                        value={formInputDraft[i] ?? ""}
+                        onChange={(e) => {
+                          const raw = e.target.value;
+                          const next = [...formInputDraft];
+                          if (raw === "") {
+                            next[i] = "";
+                          } else {
+                            next[i] = raw.replace(/\D/g, "");
+                          }
+                          setFormInputDraft(next);
+                        }}
+                        onBlur={() => {
+                          const next = [...formInputDraft];
+                          const raw = (next[i] ?? "").trim();
+                          if (raw === "") {
+                            next[i] = "0";
+                          } else {
+                            const n = Number.parseInt(raw, 10);
+                            const base = Number.isNaN(n) ? 0 : Math.max(0, Math.floor(n));
+                            next[i] = String(Math.min(maxVal, base));
+                          }
+                          setFormInputDraft(next);
+                        }}
+                        className={styles.formInput}
+                      />
+                    </label>
+                  );
+                })}
               </div>
             </div>
             <div className={styles.formActions}>

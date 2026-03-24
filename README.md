@@ -11,6 +11,7 @@ SPA для онлайн-тренировок дома: каталог курсо
 | **Vite 7**             | сборка и dev-сервер |
 | **react-router-dom 7** | маршрутизация       |
 | **CSS Modules**        | стили компонентов   |
+| **Vitest** + **Testing Library** | unit / smoke-тесты |
 
 Данные курсов и прогресса запрашиваются с **fitness API** (по умолчанию `wedev-api.sky.pro`, см. `.env.example`).
 
@@ -91,6 +92,15 @@ npm run preview
 npm run lint
 ```
 
+## Тесты (Vitest)
+
+```bash
+npm run test       # watch-режим
+npm run test:run   # один прогон (удобно для CI и перед сдачей)
+```
+
+Тесты лежат рядом с кодом (`*.test.ts` / `*.test.tsx`) и в `src/test/setup.ts` (общий setup, в т.ч. мок `window.scrollTo` для jsdom).
+
 ## Форматирование (Prettier)
 
 Проект использует **Prettier**; конфликтующие правила ESLint отключены через **eslint-config-prettier**.
@@ -124,10 +134,11 @@ src/
 ├── pages/                # Profile, Course, Workout
 ├── services/             # запросы к API (курсы, тренировки, прогресс)
 ├── types/                # типы данных API
-└── utils/                # хранилище сессии, URL видео и др.
+├── utils/                # хранилище сессии, URL видео и др.
+└── test/                 # setup для Vitest
 ```
 
-Статика (иконки, изображения) — в **`public/`**.
+Статика (логотипы, картинки курсов, favicon) — только в **`public/`** (например `public/logo.svg`, `public/Logo.png`). Дубликатов этих файлов в **корне репозитория** быть не должно.
 
 ---
 
@@ -146,10 +157,10 @@ src/
 
 Проект — **статический фронт** после `npm run build` (папка **`dist/`**). API остаётся на `wedev-api.sky.pro`, отдельный бэкенд поднимать не нужно.
 
-В корне уже лежат:
+В корне для деплоя:
 
-- **`netlify.toml`** — команда сборки и редиректы для React Router (нет 404 при обновлении `/profile`).
-- **`vercel.json`** — то же для Vercel.
+- **`netlify.toml`** — команда сборки и SPA-fallback для React Router (нет 404 при обновлении `/profile` и т.п.).
+- **`vercel.json`** — то же для **Vercel** (rewrite на `index.html`). Если деплоишь **только на Netlify**, файл можно удалить; если только на Vercel — наоборот, `netlify.toml` не обязателен. Оба файла не мешают друг другу в репозитории.
 
 ### Вариант A: Netlify
 
